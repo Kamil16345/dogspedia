@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dogs Encyklopedia</title>
+</head>
+<body>
+    <h1>The dogs encyklopedia</h1>
+    <!--
+    Specifying table which will display list of birds
+    -->
+    <table>
+        <tr>
+            <th>Species</th>
+            <th>Description</th>
+        </tr>
+        <td>Amstaff</td>
+        <td>Man's favorite</td>
+    </table>
+    <br/>
+    <!-- Here's a form which will be used to hit the
+    POST/dog API which will be build in next session
+    -->
+    <form action="/dog" method="post">
+        Species:
+        <input type ="text" name="species">
+        <br/>Description:
+        <input type="text" name="description">
+        </br>
+        <input type="submit" value="Submit">
+    </form>
+    <!--
+    The last section is script which run on each page
+    and returns list of birds and add them to existing table
+    -->
+    <script>
+        dogTable = document.querySelector("table")
+        //Using browsers `fetch` API to make GET call to
+        // /bird. We expect the response to be a JSON list of
+        //dogs of the form:
+        //  [
+        //      {"species":"...","description":"..."},
+        //      {"species","...","description":"..."}
+        //  ]
+        birdTable = document.querySelector("table")
+
+        /*
+        Use the browsers `fetch` API to make a GET call to /bird
+        We expect the response to be a JSON list of birds, of the
+        form :
+        [
+          {"species":"...","description":"..."},
+          {"species":"...","description":"..."}
+        ]
+        */
+        fetch("/dog")
+            .then(response => response.json())
+            .then(dogList => {
+                //Once we fetch the list, we iterate over it
+                dogList.forEach(dog => {
+                    // Create the table row
+                    row = document.createElement("tr")
+
+                    // Create the table data elements for the species and
+                    // description columns
+                    species = document.createElement("td")
+                    species.innerHTML = dog.species
+                    description = document.createElement("td")
+                    description.innerHTML = dog.description
+
+                    // Add the data elements to the row
+                    row.appendChild(species)
+                    row.appendChild(description)
+                    // Finally, add the row element to the table itself
+                    dogTable.appendChild(row)
+                })
+            })
+    </script>
+</body>
+</html>
